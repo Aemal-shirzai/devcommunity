@@ -1,1 +1,23 @@
-<h2 class="nav">Navigations</h2>
+<!-- Header Section -->
+{% load static %}
+<header class="header">
+<div class="container container--narrow">
+    <a href="{% url 'project_index' %}" class="header__logo">
+        <img src="{% static 'main/img/logo.svg' %}" alt="DevSearch Logo" />
+    </a>
+    <nav class="header__nav">
+        <input type="checkbox" id="responsive-menu" />
+        <label for="responsive-menu" class="toggle-menu">
+            <span>Menu</span>
+            <div class="toggle-menu__lines"></div>
+        </label>
+        <ul class="header__menu">
+            <li class="header__menuItem"><a href="index.html">Developers</a></li>
+            <li class="header__menuItem"><a href="{% url 'project_index' %}">Projects</a></li>
+            <li class="header__menuItem"><a href="inbox.html">Inbox</a></li>
+            <li class="header__menuItem"><a href="{% url 'project_create' %}">Add Project</a></li>
+            <li class="header__menuItem"><a href="login.html" class="btn btn--sub">Login/Sign Up</a></li>
+        </ul>
+    </nav>
+</div>
+</header>
