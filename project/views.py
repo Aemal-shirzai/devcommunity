@@ -45,7 +45,7 @@ def edit(request, id):
 @require_POST
 def delete(request, id):
     project = Project.objects.get(id=id)
-    if project.featured_image:
+    if project.featured_image and project.featured_image.name != 'default.png':
         project.featured_image.delete()
     project.delete()
     return redirect('project_index')
