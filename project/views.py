@@ -13,7 +13,10 @@ def index(request):
     return render(request, 'project/index.html', {'projects': projects})
 
 def show(request, id):
-    project = Project.objects.get(id=id)
+    project = Project.objects \
+        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
+        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down'))) \
+        .get(id=id)
     return render(request, 'project/show.html', {'project': project})
 
 def create(request):
