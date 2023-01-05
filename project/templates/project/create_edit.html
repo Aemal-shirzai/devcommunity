@@ -6,7 +6,8 @@
     <main class="formPage my-xl">
         <div class="content-box">
             <div class="formWrapper">
-                <a class="backButton" href="#"><i class="im im-angle-left"></i></a>
+                {% comment %} <a class="backButton" href="#"><i class="im im-angle-left"></i></a> {% endcomment %}
+                <div style="text-align:center; font-weight: bold">Manage Project</div>
                 <br>
                 <form class="form" action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
