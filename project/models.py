@@ -20,7 +20,7 @@ class Review(models.Model):
         ('down', 'Down Vote')
     )
 
-    project = models.ForeignKey(Project(), on_delete=models.CASCADE, related_name='reviews')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
     value = models.CharField(max_length=200, choices=VOTE_TYPE)
     body = models.TextField(max_length=3000, blank=True, null=True)
 

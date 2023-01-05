@@ -3,10 +3,13 @@ from django.views.decorators.http import require_http_methods, require_POST
 from django.http import HttpResponse
 from .models import Project
 from .forms import ProjectForm
+from django.db.models import Count, Q
 
 # Create your views here.
 def index(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all() \
+        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
+        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
     return render(request, 'project/index.html', {'projects': projects})
 
 def show(request, id):
