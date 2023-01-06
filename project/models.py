@@ -1,7 +1,9 @@
 from django.db import models
+from user.models import Profile
 
 class Project(models.Model):
     title = models.CharField(max_length=255)
+    owner = models.ForeignKey(Profile, related_name='projects', on_delete=models.SET_NULL, null=True)
     desciption = models.TextField(max_length=3000, null=True, blank=True)
     demo_link = models.CharField(max_length=400, null=True, blank=True)
     source_link = models.CharField(max_length=400, null=True, blank=True)
