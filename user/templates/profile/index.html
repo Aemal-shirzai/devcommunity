@@ -37,6 +37,9 @@
                                     alt="image" />
                                 <div class="dev__meta">
                                     <h3>{{ profile.name }}</h3>
+                                    {% if not profile.is_active_profile %}
+                                    <span style="background:red;padding: 0px 2px;color:white;font-size: 10px;">Not Active</span>
+                                    {% endif %}
                                     <h5>{{ profile.short_intro|slice:'20' }}</h5>
                                 </div>
                             </div>

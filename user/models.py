@@ -21,6 +21,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def is_active_profile(self):
+        return True if self.user and self.user.is_active else False
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=50)
@@ -29,5 +33,3 @@ class Skill(models.Model):
 
     def __str__(self):
         return self.name
-    
-    

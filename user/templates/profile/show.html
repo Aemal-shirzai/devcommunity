@@ -12,6 +12,9 @@
                     <div class="card__body dev">
                         <img class="avatar avatar--xl" src="{{ profile.profile_image.url }}" />
                         <h2 class="dev__name">{{ profile.name }}</h2>
+                        {% if not profile.is_active_profile %}
+                        <span style="background:red;padding: 0px 2px;color:white;font-size: 10px;">Not Active</span>
+                        {% endif %}
                         <p class="dev__title">{{ profile.short_intro }}</p>
                         <p class="dev__location">Based in Florida, USA</p>
                         <ul class="dev__social">

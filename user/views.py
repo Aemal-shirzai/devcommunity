@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Profile
 from django.db.models import Count, Q
+from .models import Profile
 
 def index(request):
     profiles = Profile.objects.all()
