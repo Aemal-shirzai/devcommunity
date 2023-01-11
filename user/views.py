@@ -1,21 +1,11 @@
-from django.shortcuts import render, redirect
-from django.db.models import Count, Q
-from .models import Profile
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from functools import wraps
+from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
-
-def must_not_login(fallback_url):
-    def decorator(function):
-        def wrapper(*args, **kwargs):
-            request = args[0]
-            if request.user.is_authenticated:
-                return redirect(fallback_url)
-            return function(*args, **kwargs)
-        return wrapper
-    return decorator
+from .decorators import must_not_login
+from django.db.models import Count, Q
+from django.contrib import messages
+from .models import Profile
 
 def index(request):
     profiles = Profile.objects.all()
@@ -23,11 +13,12 @@ def index(request):
 
 def show(request, id):
     profile = Profile.objects.get(id=id)
+    top_skills = profile.skills.exclude(description='')
+    other_skills = profile.skills.filter(description='')
     projects = profile.projects \
         .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
         .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
-    top_skills = profile.skills.exclude(description='')
-    other_skills = profile.skills.filter(description='')
+
     context = {
         'profile': profile,
         'projects': projects,
@@ -59,9 +50,7 @@ def register_user(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            form.save()
+            user = form.save()
             messages.success(request, 'Account created seccessfully. Login Now')
             return redirect('profile_login')
 

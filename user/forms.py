@@ -16,3 +16,10 @@ class CustomUserCreationForm(UserCreationForm):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})
+
+    def save(self, commit=True):
+        user = super(CustomUserCreationForm, self).save(commit=False)
+        user.username = user.username.lower()
+        if commit:
+            user.save()
+        return user

@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_POST
-from django.http import HttpResponse
-from .models import Project
-from .forms import ProjectForm
-from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.db.models import Count, Q
+from django.http import HttpResponse
+from .forms import ProjectForm
+from .models import Project
 
 def index(request):
     projects = Project.objects.all() \
