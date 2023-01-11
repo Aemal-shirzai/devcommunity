@@ -1,6 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Count, Q
 from .models import Profile
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from functools import wraps
+
+def must_not_login(fallback_url):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            request = args[0]
+            if request.user.is_authenticated:
+                return redirect(fallback_url)
+            return function(*args, **kwargs)
+        return wrapper
+    return decorator
 
 def index(request):
     profiles = Profile.objects.all()
@@ -20,3 +34,20 @@ def show(request, id):
         'other_skills': other_skills
     }
     return render(request, 'profile/show.html', context)
+
+@must_not_login(fallback_url='profile_index')
+def login_user(request):
+    if request.method == 'POST':
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user:
+            login(request, user)
+            url = 'profile_index' if not request.GET.get('next') else request.GET.get('next')
+            return redirect(url)
+        else:
+            messages.error(request, 'Invalid Username or Password')
+    return render(request, 'profile/login.html')
+
+@login_required(login_url='profile_login')
+def logout_user(request):
+    logout(request)
+    return redirect('profile_login')

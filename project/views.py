@@ -4,8 +4,8 @@ from django.http import HttpResponse
 from .models import Project
 from .forms import ProjectForm
 from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 def index(request):
     projects = Project.objects.all() \
         .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
@@ -19,6 +19,7 @@ def show(request, id):
         .get(id=id)
     return render(request, 'project/show.html', {'project': project})
 
+@login_required(login_url='profile_login')
 def create(request):
     form = ProjectForm()
     if request.method == 'POST':
@@ -30,6 +31,7 @@ def create(request):
     context = { 'form': form }
     return render(request, 'project/create_edit.html', context)
 
+@login_required(login_url='profile_login')
 def edit(request, id):
     project = Project.objects.get(id=id)
     form = ProjectForm(instance=project)
@@ -42,6 +44,7 @@ def edit(request, id):
     context = { 'form': form }
     return render(request, 'project/create_edit.html', context)
 
+@login_required(login_url='profile_login')
 @require_POST
 def delete(request, id):
     project = Project.objects.get(id=id)
