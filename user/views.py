@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from functools import wraps
+from .forms import CustomUserCreationForm
 
 def must_not_login(fallback_url):
     def decorator(function):
@@ -51,3 +52,18 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('profile_login')
+
+@must_not_login(fallback_url='profile_index')
+def register_user(request):
+    form = CustomUserCreationForm()
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            form.save()
+            messages.success(request, 'Account created seccessfully. Login Now')
+            return redirect('profile_login')
+
+    context = {'form': form}
+    return render(request, 'profile/register.html', context)

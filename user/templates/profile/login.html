@@ -26,7 +26,8 @@
             <!-- Input:Password -->
             <div class="form__field">
                 <label for="formInput#password">Password: </label>
-                <input class="input input--password" id="formInput#passowrd" type="password" name="password" />
+                <input class="input input--password" id="formInput#passowrd" type="password" name="password" 
+                    placeholder='Password...'/>
             </div>
             <div class="auth__actions">
                 <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
@@ -35,7 +36,7 @@
         </form>
         <div class="auth__alternative">
             <p>Don’t have an Account?</p>
-            <a href="signup.html">Sign Up</a>
+            <a href="{% url 'profile_register' %}">Sign Up</a>
         </div>
     </div>
 </div>
