@@ -40,7 +40,7 @@
                     <a href="#" onclick="event.preventDefault();document.getElementById('delete_form').submit()">Delete</a>
                 </div>
                 {% endif %}
-                <a href="{% url 'profile_show' project.owner.id %}" class="singleProject__developer">{{ project.owner.name }}</a>
+                <a href="{% url 'profile_show' project.owner.id %}" class="singleProject__developer">{{ project.owner.full_name }}</a>
                 <h2 class="singleProject__title">{{ project.title }}</h2>
                 <h3 class="singleProject__subtitle">About the Project</h3>
                 <div class="singleProject__info">

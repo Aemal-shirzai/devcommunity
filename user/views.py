@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 from .decorators import must_not_login
 from django.db.models import Count, Q
 from django.contrib import messages
@@ -56,3 +56,27 @@ def register_user(request):
 
     context = {'form': form}
     return render(request, 'profile/register.html', context)
+
+
+@login_required(login_url='profile_login')
+def account(request):
+    profile = request.user.profile
+    projects = profile.projects \
+        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
+        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
+    return render(request, 'profile/account.html', {'profile': profile, 'projects': projects})
+
+@login_required(login_url='profile_login')
+def account_edit(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account Updated')
+            return redirect('profile_account')
+
+    context = { 'form': form }
+    return render(request, 'profile/account_edit.html', context)
