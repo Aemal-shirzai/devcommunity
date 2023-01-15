@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, ProfileForm
+from .forms import CustomUserCreationForm, ProfileForm, SkillForm
 from .decorators import must_not_login
 from django.db.models import Count, Q
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Skill
 
 def index(request):
     profiles = Profile.objects.all()
@@ -80,3 +80,39 @@ def account_edit(request):
 
     context = { 'form': form }
     return render(request, 'profile/account_edit.html', context)
+
+
+# Skills
+def account_skills_create(request):
+    form = SkillForm()
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.profile = request.user.profile
+            skill.save()
+            messages.success(request, f'New Skill Added { request.POST["name"] }')
+            return redirect('profile_account')
+
+    context = { 'form': form }
+    return render(request, 'profile/account_skills_create_edit.html', context)
+
+def account_skills_edit(request, id):
+    skill = Skill.objects.get(id=id)
+    form = SkillForm(instance=skill)
+    if request.method == 'POST':
+        form = SkillForm(request.POST, instance=skill)
+        if form.is_valid():
+            skill = form.save()
+            messages.success(request, f'Skill Added { request.POST["name"] }')
+            return redirect('profile_account')
+
+    context = { 'form': form }
+    return render(request, 'profile/account_skills_create_edit.html', context)
+
+
+def account_skills_delete(request, id):
+    skill = Skill.objects.get(id=id)
+    skill.delete()
+    messages.success(request, f'Skill Added { skill.name }')
+    return redirect('profile_account')

@@ -36,7 +36,7 @@
                                 <img class="avatar avatar--md" src="{{ profile.profile_image.url }}"
                                     alt="image" />
                                 <div class="dev__meta">
-                                    <h3>{{ profile.name }}</h3>
+                                    <h3>{{ profile.full_name }}</h3>
                                     {% if not profile.is_active_profile %}
                                     <span style="background:red;padding: 0px 2px;color:white;font-size: 10px;">Not Active</span>
                                     {% endif %}

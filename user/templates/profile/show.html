@@ -11,7 +11,7 @@
                 <div class="card text-center">
                     <div class="card__body dev">
                         <img class="avatar avatar--xl" src="{{ profile.profile_image.url }}" />
-                        <h2 class="dev__name">{{ profile.name }}</h2>
+                        <h2 class="dev__name">{{ profile.full_name }}</h2>
                         {% if not profile.is_active_profile %}
                         <span style="background:red;padding: 0px 2px;color:white;font-size: 10px;">Not Active</span>
                         {% endif %}
