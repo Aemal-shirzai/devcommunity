@@ -4,13 +4,20 @@ from django.shortcuts import render, redirect
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from .forms import ProjectForm
-from .models import Project
+from .models import Project, Tag
 
 def index(request):
-    projects = Project.objects.all() \
+    search_query = request.GET.get('search_query', '')
+    tags = Tag.objects.filter(name__icontains=search_query)
+    projects = Project.objects.all().filter(
+        Q(title__icontains=search_query) | 
+        Q(owner__first_name__icontains=search_query) |
+        Q(owner__last_name__icontains=search_query) |
+        Q(tags__in=tags)
+    ) \
         .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
         .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
-    return render(request, 'project/index.html', {'projects': projects})
+    return render(request, 'project/index.html', {'projects': projects, 'search_query': search_query})
 
 def show(request, id):
     project = Project.objects \

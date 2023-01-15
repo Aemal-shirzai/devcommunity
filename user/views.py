@@ -8,8 +8,15 @@ from django.contrib import messages
 from .models import Profile, Skill
 
 def index(request):
-    profiles = Profile.objects.all()
-    return render(request, 'profile/index.html', {'profiles': profiles})
+    search_query = request.GET.get('search_query', '')
+    skills = Skill.objects.filter(name__icontains=search_query)
+    profiles = Profile.objects.distinct().filter(
+        Q(first_name__icontains=search_query) | 
+        Q(last_name__icontains=search_query) |
+        Q(short_intro__icontains=search_query) |
+        Q(skills__in=skills)
+    )
+    return render(request, 'profile/index.html', {'profiles': profiles, 'search_query': search_query})
 
 def show(request, id):
     profile = Profile.objects.get(id=id)
@@ -83,6 +90,7 @@ def account_edit(request):
 
 
 # Skills
+@login_required(login_url='profile_login')
 def account_skills_create(request):
     form = SkillForm()
     if request.method == 'POST':
@@ -97,6 +105,7 @@ def account_skills_create(request):
     context = { 'form': form }
     return render(request, 'profile/account_skills_create_edit.html', context)
 
+@login_required(login_url='profile_login')
 def account_skills_edit(request, id):
     skill = Skill.objects.get(id=id)
     form = SkillForm(instance=skill)
@@ -110,7 +119,7 @@ def account_skills_edit(request, id):
     context = { 'form': form }
     return render(request, 'profile/account_skills_create_edit.html', context)
 
-
+@login_required(login_url='profile_login')
 def account_skills_delete(request, id):
     skill = Skill.objects.get(id=id)
     skill.delete()

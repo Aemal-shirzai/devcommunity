@@ -28,6 +28,7 @@ class SkillForm(forms.ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})
 
+
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
