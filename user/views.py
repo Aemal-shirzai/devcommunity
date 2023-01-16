@@ -2,12 +2,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .decorators import must_not_login
 from django.db.models import Count, Q
 from django.contrib import messages
 from .models import Profile, Skill
 
 def index(request):
+    
+    # Query Data
     search_query = request.GET.get('search_query', '')
     skills = Skill.objects.filter(name__icontains=search_query)
     profiles = Profile.objects.distinct().filter(
@@ -16,7 +19,26 @@ def index(request):
         Q(short_intro__icontains=search_query) |
         Q(skills__in=skills)
     )
-    return render(request, 'profile/index.html', {'profiles': profiles, 'search_query': search_query})
+
+    # Pagination
+    items_per_page = 9
+    page = request.GET.get('page')
+    range_culculation_page = page
+    paginator = Paginator(profiles, items_per_page)
+    try:
+        profiles = paginator.page(page)
+    except PageNotAnInteger:
+        profiles = paginator.page(1)
+        range_culculation_page = 1
+    except EmptyPage:
+        profiles = paginator.page(paginator.num_pages)
+
+    # Fix Alot of pages problem
+    leftIndex = (int(range_culculation_page) - 4) if not (int(range_culculation_page) - 4) < 1 else 1
+    rightIndex = (int(range_culculation_page) + 5) if not (int(range_culculation_page) + 5) > paginator.num_pages else paginator.num_pages + 1
+    custom_range = range(leftIndex, rightIndex)    
+        
+    return render(request, 'profile/index.html', {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range})
 
 def show(request, id):
     profile = Profile.objects.get(id=id)

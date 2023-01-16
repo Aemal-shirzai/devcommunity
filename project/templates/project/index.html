@@ -57,6 +57,7 @@
           {% endfor %}
         </div>
       </div>
+      {% include 'pagination.html' with query_set=projects custom_range=custom_range %}
     </section>
   </main>
 

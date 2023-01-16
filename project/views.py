@@ -1,4 +1,5 @@
 from django.views.decorators.http import require_http_methods, require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db.models import Count, Q
@@ -7,6 +8,8 @@ from .forms import ProjectForm
 from .models import Project, Tag
 
 def index(request):
+
+    # Query
     search_query = request.GET.get('search_query', '')
     tags = Tag.objects.filter(name__icontains=search_query)
     projects = Project.objects.all().filter(
@@ -17,7 +20,26 @@ def index(request):
     ) \
         .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
         .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
-    return render(request, 'project/index.html', {'projects': projects, 'search_query': search_query})
+
+    # Pagination
+    items_per_page = 9
+    page = request.GET.get('page')
+    range_culculation_page = page
+    paginator = Paginator(projects, items_per_page)
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+        range_culculation_page = 1
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+
+    # Fix Alot of pages problem
+    leftIndex = (int(range_culculation_page) - 4) if not (int(range_culculation_page) - 4) < 1 else 1
+    rightIndex = (int(range_culculation_page) + 5) if not (int(range_culculation_page) + 5) > paginator.num_pages else paginator.num_pages + 1
+    custom_range = range(leftIndex, rightIndex)
+        
+    return render(request, 'project/index.html', {'projects': projects, 'search_query': search_query, 'custom_range': custom_range})
 
 def show(request, id):
     project = Project.objects \

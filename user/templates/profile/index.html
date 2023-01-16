@@ -59,6 +59,9 @@
                 {% endfor %}
             </div>
         </div>
+
+        {% include 'pagination.html' with query_set=profiles custom_range=custom_range %}
+
     </section>
 
 </main>
