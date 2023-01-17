@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, ProfileForm, SkillForm
+from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .decorators import must_not_login
 from django.db.models import Count, Q
@@ -161,4 +161,24 @@ def account_inbox_single(request, id):
         message.save()
 
     return render(request, 'profile/account_inbox_single.html', context)
+
+def account_inbox_create(request, receiver_id):
+    receiver = Profile.objects.get(id=receiver_id)
+    form = MessageForm()
+    
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.receiver = receiver
+            if request.user.is_authenticated:
+                message.sender = request.user.profile
+                message.email = request.user.email
+                message.name = request.user.profile.full_name
+            message.save()
+            messages.success(request, 'Your message has been sent.')
+            return redirect('profile_show', receiver.id)
+
+    context = { 'form': form, 'receiver': receiver }
+    return render(request, 'profile/account_inbox_create.html', context)
 

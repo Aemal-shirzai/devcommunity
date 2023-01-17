@@ -61,7 +61,9 @@
                             </li>
                             {% endif %}
                         </ul>
-                        <a href="#" class="btn btn--sub btn--lg">Send Message </a>
+                        {% if not request.user.id == profile.user.id  %}
+                        <a href="{% url 'account_inbox_create' profile.id %}" class="btn btn--sub btn--lg">Send Message </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

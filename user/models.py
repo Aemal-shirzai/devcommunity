@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import CheckConstraint, Q, F
 from django.contrib.auth.models import User
 
 
@@ -45,7 +46,7 @@ class Skill(models.Model):
 
 class Message(models.Model):
     sender = models.ForeignKey(Profile, related_name='send_messages', on_delete=models.SET_NULL, null=True, blank=True)
-    receiver = models.ForeignKey(Profile, related_name='messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(Profile, related_name='messages', on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=240, blank=True)
     email = models.EmailField(max_length=254, blank=True)
     subject = models.CharField(max_length=50)
@@ -57,6 +58,16 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['is_read', '-create_date']
+        constraints = [
+            CheckConstraint(
+                check = ~Q(sender=F('receiver')), 
+                name = 'check_sender_reciever_same_message',
+            ),
+        ]
+    
+    @property
+    def sender_has_profile(self):
+        return True if self.sender else False
 
 
     def __str__(self):

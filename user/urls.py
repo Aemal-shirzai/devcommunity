@@ -12,5 +12,6 @@ urlpatterns = [
     path('account/skills/delete/<int:id>', views.account_skills_delete, name='profile_account_skills_delete'),
     path('account/inbox', views.account_inbox, name='account_inbox'),
     path('account/inbox/<int:id>', views.account_inbox_single, name='account_inbox_single'),
+    path('account/inbox/create/<int:receiver_id>', views.account_inbox_create, name='account_inbox_create'),
     path('<int:id>', views.show, name='profile_show')
 ]
