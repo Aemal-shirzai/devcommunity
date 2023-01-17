@@ -16,6 +16,8 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-create_date', 'title']
         
     @property
     def up_votes(self):
