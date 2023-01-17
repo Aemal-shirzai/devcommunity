@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .decorators import must_not_login
 from django.db.models import Count, Q
 from django.contrib import messages
-from .models import Profile, Skill
+from .models import Profile, Skill, Message
 
 def index(request):
     
@@ -150,4 +150,15 @@ def account_inbox(request):
     profile = request.user.profile
     context = {'profile': profile}
     return render(request, 'profile/account_inbox.html', context)
+
+@login_required(login_url='profile_login')
+def account_inbox_single(request, id):
+    message = Message.objects.get(id=id)
+    context = {'message': message}
+
+    if not message.is_read:
+        message.is_read = True
+        message.save()
+
+    return render(request, 'profile/account_inbox_single.html', context)
 
