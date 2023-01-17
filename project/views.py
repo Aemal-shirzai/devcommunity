@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db.models import Count, Q
 from django.http import HttpResponse
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .models import Project, Tag
+from django.contrib import messages
 
 def index(request):
 
@@ -17,9 +18,7 @@ def index(request):
         Q(owner__first_name__icontains=search_query) |
         Q(owner__last_name__icontains=search_query) |
         Q(tags__in=tags)
-    ) \
-        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
-        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
+    )
 
     # Pagination
     items_per_page = 9
@@ -42,11 +41,29 @@ def index(request):
     return render(request, 'project/index.html', {'projects': projects, 'search_query': search_query, 'custom_range': custom_range})
 
 def show(request, id):
-    project = Project.objects \
-        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
-        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down'))) \
-        .get(id=id)
-    return render(request, 'project/show.html', {'project': project})
+    project = Project.objects.get(id=id)
+
+    reviews_form = ReviewForm()
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if not request.user.is_authenticated:
+            messages.warning(request, 'You Need to login First')
+            return redirect('project_show', project.id)
+        
+        if request.user.profile == project.owner:
+            messages.warning(request, 'You can not vote for your project')
+            return redirect('project_show', project.id)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.project = project
+            review.owner = request.user.profile
+            review.save()
+            messages.success(request, 'Thank You! your reviews has been added.')
+            return redirect('project_show', project.id)
+
+    return render(request, 'project/show.html', {'project': project, 'form': reviews_form})
 
 @login_required(login_url='profile_login')
 def create(request):
@@ -85,3 +102,4 @@ def delete(request, id):
         project.featured_image.delete()
     project.delete()
     return redirect('project_index')
+

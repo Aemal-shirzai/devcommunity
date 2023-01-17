@@ -37,11 +37,8 @@
                     <a class="project__author" href="{% url 'profile_show' project.owner.id %}">By {{ project.owner.full_name }}</a>
                   </p>
                   <p class="project--rating">
-                    <span style="font-weight: bold;">
-                      {{ project.up_reviews_count }}%
-                    </span> Postitive
-                    Feedback ({{ project.down_reviews_count|add:project.up_reviews_count }}
-                    Vote{{ project.down_reviews_count|add:project.up_reviews_count|pluralize:'s' }})
+                    <span style="font-weight: bold;"> {{ project.vote_ratio }}% </span> Postitive Feedback ({{ project.reviews.count }}
+                      Vote{{ project.reviews.count|pluralize:'s' }})
                   </p>
                   <div class="project__tags">
                     {% for tag in project.tags.all %}

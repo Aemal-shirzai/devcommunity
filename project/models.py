@@ -16,12 +16,31 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+        
+    @property
+    def up_votes(self):
+        return self.reviews.filter(value='up')
+
+    @property
+    def down_votes(self):
+        return self.reviews.filter(value='down')
+    
+    @property
+    def vote_ratio(self):
+        return 0 if not self.reviews.count() else (self.up_votes.count() / self.reviews.count()) * 100
+
+    @property
+    def reviewers(self):
+        return self.reviews.all().values_list('owner__id', flat=True)
+
+
 class Review(models.Model):
     VOTE_TYPE = (
         ('up', 'Up Vote'),
         ('down', 'Down Vote')
     )
 
+    owner = models.ForeignKey(Profile, related_name='reviews', on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
     value = models.CharField(max_length=200, choices=VOTE_TYPE)
     body = models.TextField(max_length=3000, blank=True, null=True)
@@ -29,8 +48,11 @@ class Review(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = [['owner', 'project']]
+
     def __str__(self):
-        return self.value
+        return f"({self.project.title}): {self.owner.full_name}-{self.value}"
 
 
 class Tag(models.Model):

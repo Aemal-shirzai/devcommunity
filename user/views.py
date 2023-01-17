@@ -44,13 +44,9 @@ def show(request, id):
     profile = Profile.objects.get(id=id)
     top_skills = profile.skills.exclude(description='')
     other_skills = profile.skills.filter(description='')
-    projects = profile.projects \
-        .annotate(up_reviews_count=Count('reviews', filter=Q(reviews__value='up'))) \
-        .annotate(down_reviews_count=Count('reviews', filter=Q(reviews__value='down')))
 
     context = {
         'profile': profile,
-        'projects': projects,
         'top_skills': top_skills,
         'other_skills': other_skills
     }
