@@ -17,7 +17,7 @@
             {% if not request.user.is_authenticated %}
             <li class="header__menuItem"><a href="{% url 'profile_login' %}" class="btn btn--sub">Login</a></li>
             {% else %}
-            <li class="header__menuItem"><a href="{% url 'account_inbox' %}">Inbox</a></li>
+            <li class="header__menuItem"><a href="{% url 'account_inbox' %}">Inbox ({{request.user.profile.unread_messages_count}})</a></li>
             <li class="header__menuItem"><a href="{% url 'profile_account' %}">{{ request.user.username }}</a></li>
             <li class="header__menuItem"><a href="{% url 'project_create' %}">Add Project</a></li>
             <li class="header__menuItem"><a href="{% url 'profile_logout' %}" class="btn btn--sub">Logout</a></li>
