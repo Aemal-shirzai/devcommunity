@@ -55,7 +55,7 @@ def show(request, id):
 @must_not_login(fallback_url='profile_index')
 def login_user(request):
     if request.method == 'POST':
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        user = authenticate(request, username=request.POST['username'].lower(), password=request.POST['password'])
         if user:
             login(request, user)
             url = 'profile_index' if not request.GET.get('next') else request.GET.get('next')
