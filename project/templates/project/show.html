@@ -90,7 +90,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                        Login to see reviews
+                        You need to <a href="{% url 'profile_login' %}?next={{request.path}}">login</a> to view and add reviews
                     {% endif %}
 
                 </div>
