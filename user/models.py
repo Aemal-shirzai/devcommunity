@@ -29,12 +29,32 @@ class Profile(models.Model):
     @property
     def full_name(self):
         return self.first_name + ' ' + self.last_name
+    
+    @property
+    def unread_messages_count(self):
+        return self.messages.filter(is_read=False).count()
 
 
 class Skill(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=500, null=True, blank=True)
     profile = models.ForeignKey(Profile, related_name='skills', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Message(models.Model):
+    sender = models.ForeignKey(Profile, related_name='send_messages', on_delete=models.SET_NULL, null=True, blank=True)
+    receiver = models.ForeignKey(Profile, related_name='messages', on_delete=models.CASCADE)
+    name = models.CharField(max_length=240, blank=True)
+    email = models.EmailField(max_length=254, blank=True)
+    subject = models.CharField(max_length=50)
+    body = models.TextField()
+    is_read = models.BooleanField(default=False)
+
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name

@@ -10,5 +10,6 @@ urlpatterns = [
     path('account/skills', views.account_skills_create, name='profile_account_skills_create'),
     path('account/skills/edit/<int:id>', views.account_skills_edit, name='profile_account_skills_edit'),
     path('account/skills/delete/<int:id>', views.account_skills_delete, name='profile_account_skills_delete'),
+    path('account/inbox', views.account_inbox, name='account_inbox'),
     path('<int:id>', views.show, name='profile_show')
 ]

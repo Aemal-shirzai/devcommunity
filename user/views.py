@@ -143,3 +143,11 @@ def account_skills_delete(request, id):
     skill.delete()
     messages.success(request, f'Skill Added { skill.name }')
     return redirect('profile_account')
+
+
+@login_required(login_url='profile_login')
+def account_inbox(request):
+    profile = request.user.profile
+    context = {'profile': profile}
+    return render(request, 'profile/account_inbox.html', context)
+

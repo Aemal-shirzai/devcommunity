@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block title %} Inbox - {{ request.user.profile.full_name }} {% endblock title %}
+
+{% block content %}
+
+  <!-- Main Section -->
+  <main class="inbox my-xl">
+    <div class="content-box">
+      <h3 class="inbox__title">New Messages(<span>{{ profile.unread_messages_count }}</span>)</h3>
+      <ul class="messages">
+        {% if not profile.messages.all %}
+          <h3> No Messages </h3>
+        {% endif %}
+        {% for message in profile.messages.all %}
+        <li class="message {% if not message.is_read %} message--unread {% endif %}">
+          <a href="message.html">
+            <span class="message__author">{{ message.name }}</span>
+            <span class="message__subject">{{ message.subject }}</span>
+            <span class="message__date">{{ message.create_date }}</span>
+          </a>
+        </li>
+        {% endfor %}
+
+      </ul>
+    </div>
+  </main>
+
+{% endblock content %}
