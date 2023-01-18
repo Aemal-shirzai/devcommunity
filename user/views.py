@@ -79,15 +79,17 @@ def register_user(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Account created seccessfully. Login Now')
-            mail = EmailMessage(
-                subject='Welcome to DevCommunity', 
-                body='We are glad you are here! Please find the attachment as our terms and conditions', 
-                from_email=settings.EMAIL_HOST_USER, 
-                to=[user.email]
-                )
-            mail.attach_file(os.path.join(settings.MEDIA_ROOT, 'default_profile.png'))
-            mail.send()
-
+            try:
+                mail = EmailMessage(
+                    subject='Welcome to DevCommunity', 
+                    body='We are glad you are here! Please find the attachment as our terms and conditions', 
+                    from_email=settings.EMAIL_HOST_USER, 
+                    to=[user.email]
+                    )
+                mail.attach_file(os.path.join(settings.MEDIA_ROOT, 'default_profile.png'))
+                mail.send()
+            except:
+                pass
             return redirect('profile_login')
 
     context = {'form': form}
