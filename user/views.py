@@ -7,9 +7,11 @@ from .decorators import must_not_login
 from django.db.models import Count, Q
 from django.contrib import messages
 from .models import Profile, Skill, Message
+from django.core.mail import EmailMessage
+from django.conf import settings
+import os
 
-def index(request):
-    
+def index(request):    
     # Query Data
     search_query = request.GET.get('search_query', '')
     skills = Skill.objects.filter(name__icontains=search_query)
@@ -77,6 +79,15 @@ def register_user(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Account created seccessfully. Login Now')
+            mail = EmailMessage(
+                subject='Welcome to DevCommunity', 
+                body='We are glad you are here! Please find the attachment as our terms and conditions', 
+                from_email=settings.EMAIL_HOST_USER, 
+                to=[user.email]
+                )
+            mail.attach_file(os.path.join(settings.MEDIA_ROOT, 'default_profile.png'))
+            mail.send()
+
             return redirect('profile_login')
 
     context = {'form': form}
