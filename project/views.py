@@ -13,7 +13,7 @@ def index(request):
     # Query
     search_query = request.GET.get('search_query', '')
     tags = Tag.objects.filter(name__icontains=search_query)
-    projects = Project.objects.all().filter(
+    projects = Project.objects.all().distinct().filter(
         Q(title__icontains=search_query) | 
         Q(owner__first_name__icontains=search_query) |
         Q(owner__last_name__icontains=search_query) |
@@ -74,6 +74,8 @@ def create(request):
             project = form.save(commit=False)
             project.owner = request.user and request.user.profile or False
             project.save()
+             # Add tags
+            project.tags.set(form.cleaned_data['tags'])
             return redirect('project_index')
 
     context = { 'form': form }
@@ -89,6 +91,10 @@ def edit(request, id):
             project = form.save(commit=False)
             project.owner = request.user and request.user.profile or False
             project.save()
+
+            # Add tags
+            project.tags.set(form.cleaned_data['tags'])
+
             return redirect('project_show', project.id)
 
     context = { 'form': form }
