@@ -30,8 +30,8 @@ ALLOWED_HOSTS = []
 # Emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = 'a677b2794e94f0'
-EMAIL_HOST_PASSWORD = 'fafb07bc515987'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = '2525'
 
 # Rest Api
