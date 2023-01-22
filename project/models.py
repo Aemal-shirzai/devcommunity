@@ -35,6 +35,10 @@ class Project(models.Model):
     def reviewers(self):
         return self.reviews.all().values_list('owner__id', flat=True)
 
+    
+    def is_owner(self, request):
+        return request.user.profile == self.owner
+
 
 class Review(models.Model):
     VOTE_TYPE = (
