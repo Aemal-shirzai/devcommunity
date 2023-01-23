@@ -33,7 +33,7 @@
                 {% endif %}
             </div>
             <div class="column column--2of3">
-                <img class="singleProject__preview" src="{{ project.featured_image.url }}" alt="portfolio thumbnail" />
+                <img class="singleProject__preview" src="{{ project.get_image_url }}" alt="portfolio thumbnail" />
                 {% if request.user.is_authenticated %}
                 <div style="text-align: right;">
                     <a href="{% url 'project_edit' project.id %}">Edit</a>
