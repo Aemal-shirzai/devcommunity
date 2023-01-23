@@ -112,7 +112,7 @@
                     </form>
                     <tr>
                         <td class="settings__thumbnail">
-                            <a href="single-project.html"><img src="{{ project.featured_image.url }}" alt="Project Thumbnail" /></a>
+                            <a href="single-project.html"><img src="{{ project.get_image_url }}" alt="Project Thumbnail" /></a>
                         </td>
                         <td class="settings__tableInfo">
                             <a href="single-project.html">{{ project.title }}</a>

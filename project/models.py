@@ -1,5 +1,7 @@
 from user.models import Profile
 from django.db import models
+import os
+from django.conf import settings
 
 class Project(models.Model):
     title = models.CharField(max_length=255)
@@ -8,7 +10,7 @@ class Project(models.Model):
     demo_link = models.CharField(max_length=400, null=True, blank=True)
     source_link = models.CharField(max_length=400, null=True, blank=True)
     tags = models.ManyToManyField("Tag", related_name='projects')
-    featured_image = models.ImageField(upload_to="projects", null=True, default='default.png')
+    featured_image = models.ImageField(upload_to="projects", null=True, default='default.png', blank=True)
 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -34,6 +36,18 @@ class Project(models.Model):
     @property
     def reviewers(self):
         return self.reviews.all().values_list('owner__id', flat=True)
+
+    @property
+    def get_image_url(self):
+        default_image_url = 'https://www.cyclonehealth.iastate.edu/wp-content/uploads/shw-tiles/default.jpg'
+        path = default_image_url
+       
+        try:
+            path =  self.featured_image.url
+        except:
+            pass
+
+        return path
 
     
     def is_owner(self, request):
