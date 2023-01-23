@@ -51,7 +51,7 @@ def show(request, id):
             messages.warning(request, 'You Need to login First')
             return redirect('project_show', project.id)
         
-        if request.user.profile == project.owner:
+        if project.is_owner(request=request):
             messages.warning(request, 'You can not vote for your project')
             return redirect('project_show', project.id)
 
