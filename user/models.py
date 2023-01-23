@@ -10,7 +10,7 @@ class Profile(models.Model):
     short_intro = models.CharField(max_length=250)
     bio = models.TextField(null=True, blank=True)
     location = models.CharField(max_length=250, null=True)
-    profile_image = models.ImageField(upload_to='profiles', default='default_profile.png')
+    profile_image = models.ImageField(upload_to='profiles', null=True, blank=True, default='default_profile.png')
     social_github = models.CharField(max_length=500, null=True, blank=True)
     social_twitter = models.CharField(max_length=500, null=True, blank=True)
     social_linkedin = models.CharField(max_length=500, null=True, blank=True)
@@ -34,6 +34,18 @@ class Profile(models.Model):
     @property
     def unread_messages_count(self):
         return self.messages.filter(is_read=False).count()
+
+    @property
+    def get_image_url(self):
+        default_image_url = 'https://i.stack.imgur.com/FJ65f.png'
+        path = default_image_url
+       
+        try:
+            path =  self.profile_image.url
+        except:
+            pass
+
+        return path
 
 
 class Skill(models.Model):
