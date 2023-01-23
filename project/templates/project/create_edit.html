@@ -12,11 +12,25 @@
                 <form class="form" action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% for field in form %}
-                        <div class="form__field">
-                            <label for="formInput#text">{{ field.label }}: </label>
-                            {{ field }}
-                        </div>
+                        {% if field.name != 'featured_image' %}
+                            <div class="form__field">
+                                <label>{{ field.label }}: </label>
+                                {{ field }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
+                    <div class="form__field">
+                        <label>New Tags: </label>
+                        <textarea class="input" name="new_tags" placeholder='Comma separated skills...'></textarea>
+                        <ul style="margin-left: 19px">
+                            <li>Add comma seperated skills</li>
+                            <li>Already Skills will be ignored</li>
+                        </ul>
+                    </div>
+                    <div class="form__field">
+                        <label>{{ form.featured_image.label }}: </label>
+                        {{ form.featured_image }}
+                    </div>
                     <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
                 </form>
             </div>

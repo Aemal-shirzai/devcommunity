@@ -74,8 +74,14 @@ def create(request):
             project = form.save(commit=False)
             project.owner = request.user and request.user.profile or False
             project.save()
-             # Add tags
+            # Add tags from already existed tags
             project.tags.set(form.cleaned_data['tags'])
+            # Add New tags
+            if request.POST.get('new_tags', False):
+                new_tags = request.POST['new_tags'].split(',')
+                for new_tag in new_tags:
+                    tag, created = Tag.objects.get_or_create(name=new_tag.strip())
+                    project.tags.add(tag)
             return redirect('project_index')
 
     context = { 'form': form }
@@ -92,8 +98,15 @@ def edit(request, id):
             project.owner = request.user and request.user.profile or False
             project.save()
 
-            # Add tags
+             # Add tags from already existed tags
             project.tags.set(form.cleaned_data['tags'])
+
+            # Add New tags
+            if request.POST.get('new_tags', False):
+                new_tags = request.POST['new_tags'].split(',')
+                for new_tag in new_tags:
+                    tag, created = Tag.objects.get_or_create(name=new_tag.strip())
+                    project.tags.add(tag)
 
             return redirect('project_show', project.id)
 
