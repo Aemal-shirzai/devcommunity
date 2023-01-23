@@ -7,8 +7,8 @@ class Project(models.Model):
     desciption = models.TextField(max_length=3000, null=True, blank=True)
     demo_link = models.CharField(max_length=400, null=True, blank=True)
     source_link = models.CharField(max_length=400, null=True, blank=True)
-    featured_image = models.ImageField(upload_to="projects", null=True, default='default.png')
     tags = models.ManyToManyField("Tag", related_name='projects')
+    featured_image = models.ImageField(upload_to="projects", null=True, default='default.png')
 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
