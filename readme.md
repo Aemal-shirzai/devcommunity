@@ -34,27 +34,27 @@ This is build for learning purpose.
 3. Setup python virtual environment: [(linux)](https://www.liquidweb.com/kb/how-to-setup-a-python-virtual-environment-on-windows-10/) [(Windows)](https://www.liquidweb.com/kb/how-to-setup-a-python-virtual-environment-on-windows-10/)
 
 **Note: Install the bellow packages inside virtual environment.**
-4. Install Django.
+1. Install Django.
     ```
     pip(3) install django
     ```
-5. Install Django rest framework.
+2. Install Django rest framework.
     ```
     pip(3) install djangorestframework
     ```
-6. Install Django JWT package.
+3. Install Django JWT package.
     ```
     pip(3) install djangorestframework-simplejwt
     ```
-7. Install Django django environment package.
+4. Install Django django environment package.
     ```
     pip(3) install django-environ
     ```
-8. Install Django python postgreSQL package if you are using postgreSQL as database.
+5. Install Django python postgreSQL package if you are using postgreSQL as database.
     ```
     pip(3) install psycopg2-binary
     ```
-9. Install Django python pillow package for image processing.
+6. Install Django python pillow package for image processing.
     ```
     pip(3) install Pillow
     ```
