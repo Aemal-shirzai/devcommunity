@@ -72,7 +72,7 @@ class Review(models.Model):
         unique_together = [['owner', 'project']]
 
     def __str__(self):
-        return f"({self.project.title}): {self.owner.full_name}-{self.value}"
+        return self.value
 
 
 class Tag(models.Model):
