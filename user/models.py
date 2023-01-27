@@ -21,7 +21,7 @@ class Profile(models.Model):
     update_date = models.DateTimeField(auto_now=True)
 
     class Meta:
-            ordering = ['-create_date']
+        ordering = ['-create_date']
 
     def __str__(self):
         return self.full_name
