@@ -13,7 +13,7 @@ def index(request):
     # Query
     search_query = request.GET.get('search_query', '')
     tags = Tag.objects.filter(name__icontains=search_query)
-    projects = Project.objects.all().distinct().filter(
+    projects = Project.objects.all().distinct().filter(is_published=True).filter(
         Q(title__icontains=search_query) | 
         Q(owner__first_name__icontains=search_query) |
         Q(owner__last_name__icontains=search_query) |
