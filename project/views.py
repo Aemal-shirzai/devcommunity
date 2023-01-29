@@ -122,3 +122,15 @@ def delete(request, id):
     project.delete()
     return redirect('project_index')
 
+@login_required(login_url='profile_login')
+@require_POST
+def publish(request, id):
+    project = Project.objects.get(id=id)
+    if not project.is_owner(request=request):
+        messages.warning(request, 'Only owners are allowed')
+        return redirect('project_show', project.id)
+    project.is_published = not project.is_published
+    project.save()
+    messages.success(request, f'Project seccessfully {"Published" if project.is_published else "Unpublished"}')
+    return redirect('project_show', project.id)
+
