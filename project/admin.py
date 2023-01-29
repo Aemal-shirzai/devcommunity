@@ -4,10 +4,20 @@ from .models import Project, Review, Tag
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ("title", "owner", 'tags_count', 'update_date')
+    list_display = ("title", "owner", "is_published", 'tags_count', 'update_date')
     list_display_links = ("title", )
     search_fields = ('title', )
     list_filter = ("owner", 'tags')
+
+    actions = ['make_published', 'make_unpublished']
+
+    @admin.action(description='Publish')
+    def make_published(self, request, queryset):
+        queryset.update(is_published=True)
+
+    @admin.action(description='Un Publish')
+    def make_unpublished(self, request, queryset):
+        queryset.update(is_published=False)
 
     def tags_count(self, obj):
         return obj.tags.count()
