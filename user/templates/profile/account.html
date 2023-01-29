@@ -101,8 +101,7 @@
 
                 <div class="settings">
                     <h3 class="settings__title">Projects</h3>
-                    <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'project_create' %}"><i class="im im-plus"></i> Add
-                        Project</a>
+                    <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'project_create' %}"><i class="im im-plus"></i> Add Project</a>
                 </div>
 
                 <table class="settings__table">
@@ -112,10 +111,17 @@
                     </form>
                     <tr>
                         <td class="settings__thumbnail">
-                            <a href="single-project.html"><img src="{{ project.get_image_url }}" alt="Project Thumbnail" /></a>
+                            {% if project.is_published %}
+                            Published
+                            {% else %}
+                            Yet to publish
+                            {% endif %}
+                            <a href="{% url 'project_show' project.id %}"><img src="{{ project.get_image_url }}" alt="Project Thumbnail" /></a>
                         </td>
                         <td class="settings__tableInfo">
-                            <a href="single-project.html">{{ project.title }}</a>
+                            <a href="{% url 'project_show' project.id %}">
+                                {{ project.title }}
+                            </a>
                             <p>
                                 {{ project.desciption|slice:'150' }}
                             </p>

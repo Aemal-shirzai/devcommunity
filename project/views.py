@@ -13,7 +13,7 @@ def index(request):
     # Query
     search_query = request.GET.get('search_query', '')
     tags = Tag.objects.filter(name__icontains=search_query)
-    projects = Project.objects.all().distinct().filter(
+    projects = Project.objects.all().distinct().filter(is_published=True).filter(
         Q(title__icontains=search_query) | 
         Q(owner__first_name__icontains=search_query) |
         Q(owner__last_name__icontains=search_query) |
@@ -121,4 +121,16 @@ def delete(request, id):
         project.featured_image.delete()
     project.delete()
     return redirect('project_index')
+
+@login_required(login_url='profile_login')
+@require_POST
+def publish(request, id):
+    project = Project.objects.get(id=id)
+    if not project.is_owner(request=request):
+        messages.warning(request, 'Only owners are allowed')
+        return redirect('project_show', project.id)
+    project.is_published = not project.is_published
+    project.save()
+    messages.success(request, f'Project seccessfully {"Published" if project.is_published else "Unpublished"}')
+    return redirect('project_show', project.id)
 

@@ -1,0 +1,11 @@
+{% if project.owner == request.user.profile %}
+<div class="switch_bar">
+    <div class="switch_text">Publish</div> 
+    <input type="checkbox" id="switch" {% if project.is_published %}checked{% endif %} 
+        onchange="document.getElementById('publish_form').submit()"/>
+    <label for="switch" class='switch_label'>Toggle</label>
+</div>
+<form action="{% url 'project_publish' project.id %}" method="POST" id="publish_form">
+    {% csrf_token %}
+</form>
+{% endif %}

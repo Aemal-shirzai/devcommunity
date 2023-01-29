@@ -101,6 +101,7 @@
                     <h3 class="devInfo__title">Projects</h3>
                     <div class="grid grid--two">
                         {% for project in profile.projects.all %}
+                        {% if project.is_published %}
                         <div class="column">
                             <div class="card project">
                                 <a href="{% url 'project_show' project.id %}" class="project">
@@ -123,6 +124,7 @@
                                 </a>
                             </div>
                         </div>
+                        {% endif %}
                         {% endfor %}
                         
                     </div>
