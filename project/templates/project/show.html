@@ -1,9 +1,18 @@
 {% extends 'main.html' %}
-
+{% load static %}
+{% block custom_assets %}
+    <link rel="stylesheet" href="{% static 'project/css/style.css' %}">
+{% endblock custom_assets %}
 {% block title %} Project - {{ project.title }} {% endblock title %}
 
 {% block content %}
-
+{% if project.owner == request.user.profile %}
+<div class="switch_bar">
+    <div class="switch_text">Publish</div> 
+    <input type="checkbox" id="switch" {% if project.is_published %}checked{% endif %} />
+    <label for="switch" class='switch_label'>Toggle</label>
+</div>
+{% endif %}
 <main class="singleProject my-md">
     <form action="{% url 'project_delete' project.id %}" method="POST" id="delete_form">
         {% csrf_token %}

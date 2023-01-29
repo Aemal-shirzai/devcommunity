@@ -1,12 +1,52 @@
-div.projects {
-    background-color: #cbcbcb;
+.switch_bar {
+    background-color: #dddddd;
     padding: 12px;
-    border-radius: 10px;
-    margin: 5px;
-    font-weight: bold;
+    display: flex;
+    justify-content: right;
 }
-img.projects_img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.switch_text {
+    font-size: 30px;
+    padding-right: 22px;
+    padding-top: 9px;
+}
+input#switch[type=checkbox]{
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label.switch_label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 100px;
+  height: 60px;
+  background: grey;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+label.switch_label:after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label.switch_label {
+  background: #2d2d39;
+}
+
+input:checked + label.switch_label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+label.switch_label:active:after {
+  width: 130px;
 }

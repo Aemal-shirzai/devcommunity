@@ -11,6 +11,7 @@ class Project(models.Model):
     source_link = models.CharField(max_length=400, null=True, blank=True)
     tags = models.ManyToManyField("Tag", related_name='projects')
     featured_image = models.ImageField(upload_to="projects", null=True, default='default.png', blank=True)
+    is_published = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -51,6 +52,7 @@ class Project(models.Model):
 
     
     def is_owner(self, request):
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..", request.user.profile == self.owner)
         return request.user.profile == self.owner
 
 
