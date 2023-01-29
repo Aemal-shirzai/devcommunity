@@ -52,7 +52,6 @@ class Project(models.Model):
 
     
     def is_owner(self, request):
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..", request.user.profile == self.owner)
         return request.user.profile == self.owner
 
 
