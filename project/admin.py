@@ -10,6 +10,8 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ("owner", 'tags')
 
     actions = ['make_published', 'make_unpublished']
+    date_hierarchy = 'create_date'
+    empty_value_display = '-empty-'
 
     @admin.action(description='Publish')
     def make_published(self, request, queryset):
