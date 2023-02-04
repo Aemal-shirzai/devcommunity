@@ -2,6 +2,17 @@ from django.contrib import admin
 
 from .models import Project, Review, Tag
 
+
+class ReviewInline(admin.TabularInline):
+    model = Review
+    fk_name = "project"
+    extra = 0
+    show_change_link = True
+
+class TagInline(admin.TabularInline):
+    model = Project.tags.through
+    extra = 0
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ("title", "owner", "is_published", 'tags_count', 'update_date')
@@ -16,6 +27,11 @@ class ProjectAdmin(admin.ModelAdmin):
     # By default, applied filters are preserved on the list view after creating, editing, 
     # or deleting an object. You can have filters cleared by setting this attribute to False.
     preserve_filters = False
+    inlines = [
+        TagInline,
+        ReviewInline
+    ]
+    exclude = ('tags', )
 
 
     @admin.action(description='Publish')
