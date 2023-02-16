@@ -35,5 +35,7 @@ urlpatterns = [
     # API
     path('api/', include('api.urls'))
 ]
+
+handler404 = "devcommunity.views.page_not_found_view"
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
