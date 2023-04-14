@@ -69,7 +69,7 @@ This is build for learning purpose.
 
 ## How To Run Project
 1. After installing all the packges clone or download this project.
-2. Open the project and create new .env file inside devcommunity folder. and add the following attributes. And add the database and email host details. I used SMTP mailtrap as email host and postgreSQl as Database.
+2. Open the project and create new .env file inside devcommunity folder (which is the project folder for the application). and add the following attributes. And add the database and email host details. I used SMTP mailtrap as email host and postgreSQl as Database.
     ```
     EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST='smtp.mailtrap.io'
